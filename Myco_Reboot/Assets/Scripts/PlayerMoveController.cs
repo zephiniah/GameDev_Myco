@@ -21,7 +21,7 @@ public class PlayerMoveController : MonoBehaviour
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponentInChildren<Rigidbody>();
     }
 
     private void OnMove(InputValue movementValue)

@@ -32,7 +32,7 @@ public class PlayerRotateController : MonoBehaviour
         mouseLookY = mouseVector.y;
     }
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         if(mouseVector.magnitude > lookThreshold)
         {
