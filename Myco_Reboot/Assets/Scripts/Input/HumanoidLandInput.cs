@@ -9,6 +9,7 @@ public class HumanoidLandInput : MonoBehaviour
     public bool InvertMouseY { get; private set; } = false;
     public float ZoomCameraInput {get; private set;} = 0.0f;
     public bool InvertScroll {get; private set;} = false;
+    public bool RunIsPressed {get; private set;} = false;
 
     public bool ChangeCameraWasPressedThisFrame {get; private set;} = false;
 
@@ -26,6 +27,9 @@ public class HumanoidLandInput : MonoBehaviour
         _input.HumanoidLand.Look.performed += SetLook;
         _input.HumanoidLand.Look.canceled += SetLook;
 
+        _input.HumanoidLand.Run.started += SetRun;
+        _input.HumanoidLand.Run.canceled += SetRun;
+
         _input.HumanoidLand.ZoomCamera.started += SetZoomCamera;
         _input.HumanoidLand.ZoomCamera.canceled += SetZoomCamera;        
 
@@ -38,6 +42,9 @@ public class HumanoidLandInput : MonoBehaviour
 
         _input.HumanoidLand.Look.performed -= SetLook;
         _input.HumanoidLand.Look.canceled -= SetLook;
+
+        _input.HumanoidLand.Run.started -= SetRun;
+        _input.HumanoidLand.Run.canceled -= SetRun;
 
         _input.HumanoidLand.ZoomCamera.started -= SetZoomCamera;
         _input.HumanoidLand.ZoomCamera.canceled -= SetZoomCamera;
@@ -61,6 +68,12 @@ public class HumanoidLandInput : MonoBehaviour
     {
         LookInput = ctx.ReadValue<Vector2>();
     }
+
+    private void SetRun(InputAction.CallbackContext ctx)
+    {
+        RunIsPressed = ctx.started;
+    }
+
 
     private void SetZoomCamera(InputAction.CallbackContext ctx)
     {
