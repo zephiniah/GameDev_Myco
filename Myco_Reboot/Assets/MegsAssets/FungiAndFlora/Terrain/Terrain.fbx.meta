@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: 0bd5c76244f3a0b44949ee179a6b45dd
+guid: 0c86a44b19be5534ca9d2d327880e60a
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: TerrainSG1
-    second: {fileID: 2100000, guid: da7bf52a5b2f32349ab2898727586b47, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
