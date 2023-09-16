@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: c9fffd802edf95b41997f504601759ab
+guid: df2db4d7adad13e4ea338c06c3e7a055
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: ZBrush_defualt_groupMat
-    second: {fileID: 2100000, guid: f78c2d28f91451a45b04eb2baf4003f6, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
