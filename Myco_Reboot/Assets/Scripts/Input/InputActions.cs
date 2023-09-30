@@ -71,6 +71,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Value"",
+                    ""id"": ""3f091507-7aef-47f9-a858-6c6cdd56156f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -227,6 +236,28 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""03385906-a7d5-40fd-85e6-6cc434c46d9b"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b58fcd6c-bb6d-4f4d-9188-7d1c88fec11b"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -240,6 +271,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_HumanoidLand_ChangeCamera = m_HumanoidLand.FindAction("ChangeCamera", throwIfNotFound: true);
         m_HumanoidLand_ZoomCamera = m_HumanoidLand.FindAction("ZoomCamera", throwIfNotFound: true);
         m_HumanoidLand_Run = m_HumanoidLand.FindAction("Run", throwIfNotFound: true);
+        m_HumanoidLand_Jump = m_HumanoidLand.FindAction("Jump", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -306,6 +338,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_HumanoidLand_ChangeCamera;
     private readonly InputAction m_HumanoidLand_ZoomCamera;
     private readonly InputAction m_HumanoidLand_Run;
+    private readonly InputAction m_HumanoidLand_Jump;
     public struct HumanoidLandActions
     {
         private @InputActions m_Wrapper;
@@ -315,6 +348,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @ChangeCamera => m_Wrapper.m_HumanoidLand_ChangeCamera;
         public InputAction @ZoomCamera => m_Wrapper.m_HumanoidLand_ZoomCamera;
         public InputAction @Run => m_Wrapper.m_HumanoidLand_Run;
+        public InputAction @Jump => m_Wrapper.m_HumanoidLand_Jump;
         public InputActionMap Get() { return m_Wrapper.m_HumanoidLand; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -339,6 +373,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Run.started += instance.OnRun;
             @Run.performed += instance.OnRun;
             @Run.canceled += instance.OnRun;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
         }
 
         private void UnregisterCallbacks(IHumanoidLandActions instance)
@@ -358,6 +395,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Run.started -= instance.OnRun;
             @Run.performed -= instance.OnRun;
             @Run.canceled -= instance.OnRun;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
         }
 
         public void RemoveCallbacks(IHumanoidLandActions instance)
@@ -382,5 +422,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnChangeCamera(InputAction.CallbackContext context);
         void OnZoomCamera(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
 }

@@ -7010,9 +7010,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1540119435}
     - target: {fileID: 8389731576935619531, guid: ca40f232f12575e498e3c8469fe4fd7c, type: 3}
+      propertyPath: _gravityFallMax
+      value: -100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8389731576935619531, guid: ca40f232f12575e498e3c8469fe4fd7c, type: 3}
+      propertyPath: _gravityFallMin
+      value: -25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8389731576935619531, guid: ca40f232f12575e498e3c8469fe4fd7c, type: 3}
       propertyPath: _cameraController
       value: 
       objectReference: {fileID: 966630026}
+    - target: {fileID: 8389731576935619531, guid: ca40f232f12575e498e3c8469fe4fd7c, type: 3}
+      propertyPath: _gravityFallCurrent
+      value: -25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8389731576935619531, guid: ca40f232f12575e498e3c8469fe4fd7c, type: 3}
+      propertyPath: _gravityFallIncrementAmount
+      value: -10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

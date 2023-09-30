@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class HumanoidLandController : MonoBehaviour
@@ -17,6 +18,7 @@ public class HumanoidLandController : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] float _movementMultiplier = 30.0f;
+    [SerializeField] float _notGroundedMovementMultiplier = 1.25f;
     [SerializeField] float _rotationSpeedMultiplier = 180.0f;
     [SerializeField] float _pitchSpeedMultiplier = 180.0f;
     [SerializeField] float _runMultiplier = 2.5f;
@@ -36,6 +38,20 @@ public class HumanoidLandController : MonoBehaviour
     [SerializeField] float _playerFallTimer = 0.0f;
     [SerializeField] float _gravityGrounded = -1.0f;
     [SerializeField] float _maxSlopeAngle = 47.5f;
+
+    [Header("Jumping")]
+    [SerializeField] float _maxSlopeJumpAngle = 60.0f;
+    [SerializeField] float _initialJumpForce = 750.0f;
+    [SerializeField] float _continualJumpForceMultiplier = 0.1f;
+    [SerializeField] float _jumpTime = 0.175f;
+    [SerializeField] float _jumpTimeCounter = 0.0f;
+    [SerializeField] float _coyoteTime = 0.15f;
+    [SerializeField] float _coyoteTimeCounter = 0.0f;
+    [SerializeField] float _jumpBufferTime = 0.2f;
+    [SerializeField] float _jumpBufferTimeCounter = 0.0f;
+    [SerializeField] bool _playerIsJumping = false;
+    [SerializeField] bool _jumpWasPressedLastFrame = false;
+
 
     private void Awake()
     {
@@ -64,7 +80,9 @@ public class HumanoidLandController : MonoBehaviour
         _playerMoveInput = PlayerMove();
         _playerMoveInput = PlayerSlope();
         _playerMoveInput = PlayerRun();
+
         _playerMoveInput.y = PlayerFallGravity();
+        _playerMoveInput.y = PlayerJump();
 
         _playerMoveInput *= _rigidbody.mass; 
 
@@ -96,18 +114,17 @@ public class HumanoidLandController : MonoBehaviour
     {
         return new Vector3(_input.MoveInput.x, 0.0f, _input.MoveInput.y);
     }
-    private Vector3 PlayerMove()
-    {
-        return new Vector3 (_playerMoveInput.x * _movementMultiplier,
-                                        _playerMoveInput.y,
-                                        _playerMoveInput.z * _movementMultiplier);
-    }
 
     private bool PlayerGroundCheck()
     {
         float sphereCastRadius = _capsuleCollider.radius * _groundCheckRadiusMultiplier;
         float sphereCastTravelDistance = _capsuleCollider.bounds.extents.y - sphereCastRadius + _groundCheckDistance;
         return Physics.SphereCast(_rigidbody.position, sphereCastRadius, Vector3.down, out _groundCheckHit, sphereCastTravelDistance);
+    }
+
+    private Vector3 PlayerMove()
+    {
+        return ((_playerIsGrounded) ? (_playerMoveInput * _movementMultiplier) : (_playerMoveInput * _movementMultiplier * _notGroundedMovementMultiplier));
     }
 
     private Vector3 PlayerSlope()
@@ -160,7 +177,11 @@ public class HumanoidLandController : MonoBehaviour
                 }
                 else
                 {
-                    calculatedPlayerMovement.y = groundSlopeAngle *-0.2f;
+                    float calculatedSlopeGravity = groundSlopeAngle * -0.2f;
+                    if(calculatedSlopeGravity < calculatedPlayerMovement.y)
+                    {
+                        calculatedPlayerMovement.y = calculatedSlopeGravity;
+                    }
                 }
 
             }
@@ -201,6 +222,72 @@ public class HumanoidLandController : MonoBehaviour
         }
         return gravity;
     }
+
+    private float PlayerJump()
+    {
+        float calculatedJumpInput = _playerMoveInput.y;
+
+        SetJumpTimeCounter();
+        SetCoyoteTimeCounter();
+        SetJumpBufferTimeCounter();
+
+        if (_jumpBufferTimeCounter > 0.0f && !_playerIsJumping && _coyoteTimeCounter >0.0f)
+        {
+            if(Vector3.Angle(_rigidbody.transform.up, _groundCheckHit.normal) < _maxSlopeJumpAngle)
+            {
+                calculatedJumpInput = _initialJumpForce;
+                _playerIsJumping = true;
+                _jumpBufferTimeCounter = 0.0f;
+                _coyoteTimeCounter = 0.0f;
+            }
+        }
+        else if (_input.JumpIsPressed && _playerIsJumping && !_playerIsGrounded && _jumpTimeCounter > 0.0f)
+        {
+            calculatedJumpInput = _initialJumpForce * _continualJumpForceMultiplier;
+        }
+        else if (_playerIsJumping && _playerIsGrounded)
+        {
+            _playerIsJumping = false;
+        }
+
+        return calculatedJumpInput;
+    }
+
+    private void SetJumpTimeCounter()
+    {
+        if (_playerIsJumping && !_playerIsGrounded)
+        {
+            _jumpTimeCounter -= Time.fixedDeltaTime;
+        }
+        else
+        {
+            _jumpTimeCounter = _jumpTime;
+        }
+    }
+    private void SetCoyoteTimeCounter()
+    {
+        if (_playerIsGrounded)
+        {
+            _coyoteTimeCounter = _coyoteTime;
+        }
+        else
+        {
+            _coyoteTimeCounter -= Time.fixedDeltaTime;
+        }
+    }    
+    private void SetJumpBufferTimeCounter()
+    {
+        if (!_jumpWasPressedLastFrame && _input.JumpIsPressed)
+        {
+            _jumpBufferTimeCounter = _jumpBufferTime;
+        }
+        else if (_jumpBufferTimeCounter > 0.0f)
+        {
+            _jumpBufferTimeCounter -= Time.fixedDeltaTime;
+        }
+        _jumpWasPressedLastFrame = _input.JumpIsPressed;
+    }
+
 
 
 
