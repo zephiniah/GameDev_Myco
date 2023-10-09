@@ -52,6 +52,11 @@ public class HumanoidLandController : MonoBehaviour
     [SerializeField] bool _playerIsJumping = false;
     [SerializeField] bool _jumpWasPressedLastFrame = false;
 
+    [Header("Just For Fun")]
+    [SerializeField] float _jumpReactionForceMultiplier = 0.75f;
+    RaycastHit _lastGroundCheckHit = new RaycastHit();
+    Vector3 _playerMoveInputAtLastGroundCheckHit = Vector3.zero;
+
 
     private void Awake()
     {
@@ -80,6 +85,8 @@ public class HumanoidLandController : MonoBehaviour
         _playerMoveInput = PlayerMove();
         _playerMoveInput = PlayerSlope();
         _playerMoveInput = PlayerRun();
+
+        PlayerInfoCapture();
 
         _playerMoveInput.y = PlayerFallGravity();
         _playerMoveInput.y = PlayerJump();
@@ -200,6 +207,14 @@ public class HumanoidLandController : MonoBehaviour
         }
         return calculatedPlayerRunSpeed;
     }    
+    private void PlayerInfoCapture()
+    {
+        if(_groundCheckHit.collider)
+        {
+            _lastGroundCheckHit = _groundCheckHit;
+            _playerMoveInputAtLastGroundCheckHit = _playerMoveInput;
+        }
+    }
     private float PlayerFallGravity()
     {
         float gravity = _playerMoveInput.y;
@@ -235,6 +250,8 @@ public class HumanoidLandController : MonoBehaviour
         {
             if(Vector3.Angle(_rigidbody.transform.up, _groundCheckHit.normal) < _maxSlopeJumpAngle)
             {
+                KickStuffOutFromUnder();
+
                 calculatedJumpInput = _initialJumpForce;
                 _playerIsJumping = true;
                 _jumpBufferTimeCounter = 0.0f;
@@ -288,6 +305,14 @@ public class HumanoidLandController : MonoBehaviour
         _jumpWasPressedLastFrame = _input.JumpIsPressed;
     }
 
+    private void KickStuffOutFromUnder()
+    {
+        if (_lastGroundCheckHit.collider.attachedRigidbody)
+        {
+            Vector3 force = (_rigidbody.transform.TransformDirection(_playerMoveInputAtLastGroundCheckHit) * _lastGroundCheckHit.collider.attachedRigidbody.mass * _jumpReactionForceMultiplier);
+            _lastGroundCheckHit.collider.attachedRigidbody.AddForceAtPosition(-force, _lastGroundCheckHit.point, ForceMode.Impulse);
+        }
+    }
 
 
 

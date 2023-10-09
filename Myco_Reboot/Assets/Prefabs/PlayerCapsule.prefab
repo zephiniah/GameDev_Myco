@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1771822406217924639}
   m_Layer: 0
-  m_Name: Player
+  m_Name: PlayerCapsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,7 +61,7 @@ Transform:
   m_Children:
   - {fileID: 3053688039538701744}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5135503288674943653
 GameObject:
@@ -307,8 +307,8 @@ Rigidbody:
   m_GameObject: {fileID: 8649874352104756668}
   serializedVersion: 4
   m_Mass: 60
-  m_Drag: 4
-  m_AngularDrag: 4
+  m_Drag: 0.5
+  m_AngularDrag: 0.2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -332,7 +332,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8649874352104756668}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: ff5a06c8dd800214c85fd6cd7013cdb2, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -365,17 +365,30 @@ MonoBehaviour:
   _cameraController: {fileID: 0}
   _playerLookInputLerpTime: 0.35
   _movementMultiplier: 30
+  _notGroundedMovementMultiplier: 1.25
   _rotationSpeedMultiplier: 180
   _pitchSpeedMultiplier: 180
   _runMultiplier: 2.5
   _playerIsGrounded: 1
   _groundCheckRadiusMultiplier: 0.9
   _groundCheckDistance: 0.05
-  _gravityFallCurrent: -100
-  _gravityFallMin: -100
-  _gravityFallMax: -500
-  _gravityFallIncrementAmount: -20
+  _gravityFallCurrent: -10
+  _gravityFallMin: -10
+  _gravityFallMax: -75
+  _gravityFallIncrementAmount: -9.81
   _gravityFallIncrementTime: 0.05
   _playerFallTimer: 0
   _gravityGrounded: -1
   _maxSlopeAngle: 47.5
+  _maxSlopeJumpAngle: 60
+  _initialJumpForce: 750
+  _continualJumpForceMultiplier: 0.1
+  _jumpTime: 0.175
+  _jumpTimeCounter: 0
+  _coyoteTime: 0.15
+  _coyoteTimeCounter: 0
+  _jumpBufferTime: 0.2
+  _jumpBufferTimeCounter: 0
+  _playerIsJumping: 0
+  _jumpWasPressedLastFrame: 0
+  _jumpReactionForce: 2000
