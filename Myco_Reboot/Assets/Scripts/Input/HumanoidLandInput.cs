@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
+//Code sourced from video tutorials ... TODO:(add proper attribution here)
 public class HumanoidLandInput : MonoBehaviour
 {
     public Vector2 MoveInput { get; private set; } = Vector2.zero;
@@ -10,6 +12,8 @@ public class HumanoidLandInput : MonoBehaviour
     public float ZoomCameraInput {get; private set;} = 0.0f;
     public bool InvertScroll {get; private set;} = false;
     public bool RunIsPressed {get; private set;} = false;
+    public bool CrouchIsPressed {get; private set;} = false;
+
     public bool JumpIsPressed {get; private set;} = false;
 
     public bool ChangeCameraWasPressedThisFrame {get; private set;} = false;
@@ -31,6 +35,9 @@ public class HumanoidLandInput : MonoBehaviour
         _input.HumanoidLand.Run.started += SetRun;
         _input.HumanoidLand.Run.canceled += SetRun;
 
+        _input.HumanoidLand.Crouch.started += SetCrouch;
+        _input.HumanoidLand.Crouch.canceled += SetCrouch;
+
         _input.HumanoidLand.Jump.started += SetJump;
         _input.HumanoidLand.Jump.canceled += SetJump;
 
@@ -50,6 +57,9 @@ public class HumanoidLandInput : MonoBehaviour
 
         _input.HumanoidLand.Run.started -= SetRun;
         _input.HumanoidLand.Run.canceled -= SetRun;
+
+        _input.HumanoidLand.Crouch.started -= SetCrouch;
+        _input.HumanoidLand.Crouch.canceled -= SetCrouch;
 
         _input.HumanoidLand.Jump.started -= SetJump;
         _input.HumanoidLand.Jump.canceled -= SetJump;        
@@ -81,6 +91,12 @@ public class HumanoidLandInput : MonoBehaviour
     {
         RunIsPressed = ctx.started;
     }
+
+    private void SetCrouch(InputAction.CallbackContext ctx)
+    {
+        CrouchIsPressed = ctx.started;
+    }
+
     private void SetJump(InputAction.CallbackContext ctx)
     {
         JumpIsPressed = ctx.started;
